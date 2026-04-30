@@ -38,7 +38,13 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 
-// Test DB Connection and Sync
+// Start server FIRST, then connect DB
+// This ensures Railway sees the port open and doesn't timeout
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// Connect to DB after server starts
 sequelize
   .authenticate()
   .then(() => {
@@ -47,10 +53,8 @@ sequelize
   })
   .then(() => {
     console.log('All models were synchronized successfully.');
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   })
   .catch((err) => {
-    console.error('Unable to connect to the database:', err);
+    console.error('Unable to connect to the database:', err.message);
+    console.error('Server is running but database is not connected. Check DATABASE_URL.');
   });
