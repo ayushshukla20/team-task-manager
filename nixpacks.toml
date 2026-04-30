@@ -1,21 +1,16 @@
-{
-  "$schema": "https://nixpacks.com/schema.json",
-  "providers": ["node"],
-  "phases": {
-    "setup": {
-      "nixPkgs": ["nodejs_18"]
-    },
-    "install": {
-      "cmds": [
-        "cd backend && npm install",
-        "cd frontend && npm install"
-      ]
-    },
-    "build": {
-      "cmds": [
-        "cd frontend && npm run build"
-      ]
-    }
-  },
-  "start": "cd backend && NODE_ENV=production node server.js"
-}
+[phases.setup]
+nixPkgs = ["nodejs_18"]
+
+[phases.install]
+cmds = [
+  "cd backend && npm install",
+  "cd frontend && npm install"
+]
+
+[phases.build]
+cmds = [
+  "cd frontend && npm run build"
+]
+
+[start]
+cmd = "cd backend && NODE_ENV=production node server.js"
